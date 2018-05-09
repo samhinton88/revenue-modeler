@@ -17,7 +17,7 @@ function unpackArgs(args) {
 }
 
 const { price = 2000, roomrate = 6000, students = 5} = unpackArgs(process.argv.slice(2));
-// hello
+
 const javaScriptCourse = new Product;
 
 const room =  new OutFlow({amount: roomrate, period:'week'});
