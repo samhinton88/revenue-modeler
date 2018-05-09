@@ -1,0 +1,18 @@
+{
+  "name": "revenue-modeler",
+  "version": "1.0.0",
+  "description": "Experimental modeler for revenues.",
+  "main": "index.js",
+  "scripts" : {
+    "test" : "nodemon --exec 'mocha --recursive || exit 1'"
+  },
+  "author": "Sam Hinton",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "mocha": "^5.1.1",
+    "nodemon": "^1.17.4",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  }
+}
