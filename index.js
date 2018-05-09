@@ -1,45 +1,84 @@
+"use strict"
+
+Number.prototype.times = function(cb) {
+  for(let i = 0; i < this; i++) {
+    cb()
+  }
+};
+
 const {
 	Product,
 	InFlow,
 	OutFlow
 } = require('./src/models');
 
-console.log(process.argv.slice(2))
+const input = unpackArgs(process.argv.slice(2));
+
+const {
+  rev,
+  cost,
+  profitOrLoss
+} = runClassroomModel(input);
+
+(function report(rev, cost, profitOrLoss) {
+  const prettyRev = `£${ rev/ 100}`;
+  const prettyCost = `£${ cost/ 100}`;
+
+  const pl = `£${ profitOrLoss / 100}`;
+
+  console.log('revenue: \t', prettyRev);
+  console.log('cost: \t\t', prettyCost);
+  console.log('------------------------')
+  console.log('profit/loss: \t', pl )
+
+})(rev, cost, profitOrLoss);
+
+function runClassroomModel(data) {
+  const {
+    price = 2000,
+    roomrate = 6000,
+    students = 5,
+    period = 'month'
+  } = data;
+
+  const javaScriptCourse = new Product;
+
+  const room =  new OutFlow({amount: roomrate, period:'week'});
+
+
+
+  students.times(() => {
+    javaScriptCourse.addInFlow(new InFlow({amount: price, period: 'week'}));
+  });
+
+  javaScriptCourse.addOutFlow(room);
+
+  const rev = javaScriptCourse.totalRevenue(period);
+  const cost = javaScriptCourse.totalCost(period);
+  const profitOrLoss = javaScriptCourse.net(period);
+  return { rev, cost, profitOrLoss }
+}
+
 function unpackArgs(args) {
-	const obj = {};
-	console.log(args)
-	args.forEach((arg) => {
-		const [key,val] = arg.split('=');
-		obj[key] = parseInt(val);
+  const obj = {};
 
-	})
-	return obj;
-}
+  args.forEach((arg) => {
+    let [key,val] = arg.split('=');
 
-const { price = 2000, roomrate = 6000, students = 5} = unpackArgs(process.argv.slice(2));
+    if (isNaN(val)) {
 
-const javaScriptCourse = new Product;
+      obj[key] = val;
+    } else {
+      obj[key] = parseInt(val);
+    }
 
-const room =  new OutFlow({amount: roomrate, period:'week'});
+  })
+  return obj;
+};
 
-Number.prototype.times = function(cb) {
-	for(let i = 0; i < this; i++) {
-		cb()
-	}
-}
 
-students.times(() => {
-	javaScriptCourse.addInFlow(new InFlow({amount: price, period: 'week'}));
-});
 
-console.log(javaScriptCourse.inFlows)
 
-javaScriptCourse.addOutFlow(room);
-const rev = javaScriptCourse.totalRevenue()
-const cost = javaScriptCourse.totalCost()
 
-const prettyRev = `£${ rev/ 100}`;
-const prettyCost = `£${ cost/ 100}`;
 
-console.log('revenue: ', prettyRev);
-console.log('cost: ', prettyCost);
+

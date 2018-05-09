@@ -4,6 +4,7 @@ const {
 	InFlow,
 	OutFlow
 } = require('../src/models');
+const {outFlowData, inFlowData} = require('./data');
 
 
 describe('Product', function() {
@@ -11,11 +12,11 @@ describe('Product', function() {
 	const lesson = new Product({ name: 'JavaScript', category: 'group' });
 	const lessons = [];
 
-	for (let i = 0; i < 5; i++ ) { 
+	for (let i = 0; i < 5; i++ ) {
 		const lesson = new Product;
 		for (let i = 0; i < 10; i++) {
 			const student = new InFlow({ amount: price, period: 'week' })
-			lesson.addInflow(student)
+			lesson.addInFlow(student)
 		};
 		const room = new OutFlow({ amount: 6000, period: 'week' });
 		lesson.addOutFlow(room);
@@ -32,32 +33,33 @@ describe('Product', function() {
 	it('registers an in-flow', function(){
 		const candidateProduct = new Product;
 		const candidateInFlow = new InFlow({amount: 2000});
-		candidateProduct.addInflow(candidateInFlow);
+		candidateProduct.addInFlow(candidateInFlow);
 		assert(candidateProduct.inFlows.length === 1);
 	});
 
 	it('returns a monthly total revenue by default', function() {
-		console.log('monthly total revenue',lessons[0].totalRevenue())
 		assert( lessons[0].totalRevenue() > 80000 )
 	});
 
 	it('returns an accurate monthly total for an annual inflow', function() {
 		const candidate = new Product;
 		const inflow  = new InFlow({amount: 12000, period: 'year'});
-		candidate.addInflow(inflow);
-		console.log('monthly for annual ',candidate.totalRevenue('month') )
+		candidate.addInFlow(inflow);
 		assert(candidate.totalRevenue('month') > 950)
 		assert(candidate.totalRevenue('month') < 1050)
 	})
 
 	it('can return a weekly total revenue', function() {
-		console.log('weekly total revenue',lessons[0].totalRevenue('week'))
 		assert(lessons[0].totalRevenue('week') === 20000)
 	});
 
 	it('can return an annual total revenue', function() {
-		console.log('annual ',lessons[0].totalRevenue('year'))
-		assert(lessons[0].totalRevenue('year') === 520000)
+
+    const revenue = lessonOne.totalRevenue('year')
+		assert(
+      revenue < ((20000 / 7) * 366) &&
+      revenue > ((20000 / 7) * 364)
+    )
 	});
 
 
@@ -66,7 +68,7 @@ describe('Product', function() {
 	});
 
 	it('returns a monthly total cost by default', function() {
-	
+
 		assert(lessonOne.totalCost() > 24000)
 		assert(lessonOne.totalCost() < 26000)
 	})
@@ -80,8 +82,9 @@ describe('Product', function() {
 		assert(lessonOne.totalCost('year') < (52.5 * 6000))
 	})
 
-
-
+  it('returns a profit / loss', function() {
+    assert(lessonOne.net())
+  })
 
 
 })

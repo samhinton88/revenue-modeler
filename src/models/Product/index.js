@@ -11,6 +11,10 @@ class Product {
 		}
 	}
 
+  net(period) {
+    return this.totalRevenue(period) - this.totalCost(period);
+  }
+
 	addInFlow(inFlow) {
 		this.inFlows.push(inFlow);
 	}
@@ -25,15 +29,15 @@ class Product {
 	}
 
 	totalRevenue(period = 'month') {
-		
+
 		return this.total('inFlows', period);
 	}
 
 	total(flowType, period) {
-		
+
 		return Math.floor(
 			this[flowType].reduce((m, i) => {
-		
+
 				return m + this.calculatePeriodAmount(i) * this.periodMap[period];
 
 			}, 0)
@@ -41,7 +45,7 @@ class Product {
 	}
 
 	calculatePeriodAmount(flowObject) {
-		// take period and return contribution 
+		// take period and return contribution
 		const periodMultiplier = this.periodMap[flowObject.period];
 		return flowObject.amount / periodMultiplier;
 	}

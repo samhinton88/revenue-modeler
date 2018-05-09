@@ -4,7 +4,8 @@
   "description": "Experimental modeler for revenues.",
   "main": "index.js",
   "scripts" : {
-    "test" : "nodemon --exec 'mocha --recursive || exit 1'"
+    "test" : "nodemon --exec 'mocha --recursive || exit 1'",
+    "start" : "nodemon index.js"
   },
   "author": "Sam Hinton",
   "license": "MIT",
